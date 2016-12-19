@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <p:messages/>
+        <h:form>
+            <p:panel header="Cadastro de Cidade">
+                <h:panelGrid columns="2">
+                    Código:<p:inputText 
+                        value="#{cidadeControle.entidade.id}" 
+                        readonly="true"/>
+                    Nome:<p:inputText 
+                        value="#{cidadeControle.entidade.nome}" 
+                        required="true" 
+                        requiredMessage="Nome é obrigatório!"/>
+                    CEP:<p:inputMask value="#{cidadeControle.entidade.cep}" mask="99999-999" required="true" requiredMessage="CEP é obrigatório!"/>
+                    Estado: <p:selectOneMenu 
+                        value="#{cidadeControle.entidade.estado}" 
+                        converter="#{estadoControle.converter}" 
+                        required="true" 
+                        filter="true"
+                        requiredMessage=" Informe o Estado">
+                        <f:selectItems value="#{estadoControle.listaEntidades}"
+                                       var="est"
+                                       itemLabel="#{est.nome}"
+                                       itemValue="#{est}"/>
+                    </p:selectOneMenu>
+                    
+                    <f:facet name="footer">
+                        <p:commandButton value="Salvar" 
+                                         action="#{cidadeControle.salvar()}" 
+                                         ajax="false"
+                                         icon="ui-icon-disk"/>
+                        <p:button value="Cancelar" outcome="list.xhtml" icon="ui-icon-arrowreturnthick-1-w"/>      
+                    </f:facet>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>  
+    </ui:define>
+</ui:composition>

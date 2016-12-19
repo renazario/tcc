@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages/>
+            <p:panel header="Lista de Clientes">
+                <p:dataTable value="#{pessoaControle.listaEntidades}"
+                             var="pessoa"
+                             sortBy="#{pessoa.id}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="5,10,15,20"
+                             filterEvent="enter"
+                             selectionMode="single"
+                             selection="#{pessoaControle.entidade}"
+                             rowKey="#{pessoa.id}"
+                             emptyMessage="Não há registro na lista!">
+                    <f:facet name="header">
+                        <p:commandButton value="Novo" 
+                                         action="#{pessoaControle.novo()}" 
+                                         icon="ui-icon-plus" 
+                                         ajax="false" />
+                        <p:commandButton value="Alterar" 
+                                         action="#{pessoaControle.carregarCadastro()}"
+                                         icon="ui-icon-pencil" 
+                                         ajax="false"/>
+                        <p:commandButton value="Excluir" 
+                                         action="#{pessoaControle.excluir()}"
+                                         onclick="return confirm('deseja excluir?')"
+                                         icon="ui-icon-trash" 
+                                         ajax="false"/>
+                    </f:facet>
+                    <p:column headerText="ID"
+                              width="40"
+                              sortBy="#{pessoa.id}">
+                        <h:outputText value="#{pessoa.id}"/>
+                    </p:column>
+                    <p:column headerText="Nome/Fantasia"
+                              filterBy="#{pessoa.nomes}"
+                              filterMatchMode="contains"
+                              sortBy="#{pessoa.nomes}">
+                        <h:outputText value="#{pessoa.nomes}"/>
+                    </p:column>
+                    <p:column headerText="CPF/CNPJ">
+                        <h:outputText value="#{pessoa.documentoFederal}"/>
+                    </p:column>
+                    <p:column headerText="RG/IE">
+                        <h:outputText value="#{pessoa.documentoEstadual}"/>
+                    </p:column>
+                    <p:column headerText="Pendência">
+                        <h:outputText value="#{pessoa.pendencia?'Sim':'Nao'}"/>
+                    </p:column>
+                    <p:column headerText="Ativo">
+                        <h:outputText value="#{pessoa.ativo?'Sim':'Nao'}"/>
+                    </p:column>
+
+<!--                    <p:column headerText="Opções">
+                        <p:commandButton value="Alterar"
+                                         action="form?faces-redirect=true"
+                                         actionListener="{pessoaControle.setEntidade(pessoa)}"
+                                         ajax="false"/>
+
+                        <p:commandButton value="Excluir"
+                                         action="{pessoaControle.excluir(pessoa)}"
+                                         onclick="return confirm('Deseja Excluir?')"
+                                         ajax="false"/>
+                    </p:column>-->
+                </p:dataTable>
+<!--                <f:facet name="footer">
+                    <p:commandButton value="Novo"
+                                     action="{pessoaControle.novo()}"
+                                     ajax="false"/>
+                </f:facet>-->
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:confirmDialog header="Confirmação" 
+                             message="Deseja excluir o cliente?" 
+                             severity="alert" 
+                             closable="false" 
+                             widgetVar="confirmacao">
+                <p:commandButton value="Sim" 
+                                 action="#{pessoaControle.excluir()}" 
+                                 icon="ui-icon-check" 
+                                 ajax="false"/>
+                <p:commandButton value="Não" 
+                                 action="#{pessoaControle.voltar()}"
+                                 ajax="false" 
+                                 icon="ui-icon-closetick" 
+                                 immediate="true"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

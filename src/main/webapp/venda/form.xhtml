@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="conteudo">
+        <p:messages/>
+        <h:form id="form">
+            <p:panel header="Movimento de Venda">
+                <h:panelGrid columns="2">
+                    Data da venda:<p:calendar value="#{vendaControle.entidade.dtVenda}"
+                                              pattern="dd/MM/yyyy"/>
+
+                    Cliente:<p:selectOneMenu value="#{vendaControle.entidade.pessoa}"
+                                             converter="#{pessoaControle.converter}"
+                                             filter="true">
+                        <f:selectItems value="#{pessoaControle.listaEntidades}"
+                                       var="cli"
+                                       itemLabel="#{cli.nomes}"
+                                       itemValue="#{cli}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <hr/>
+                <h:panelGrid columns="6">
+                    Produto:<p:selectOneMenu value="#{vendaControle.entidade.item.produto}"
+                                             converter="#{produtoControle.converter}"
+                                             filter="true"
+                                             >
+                        <f:selectItem itemLabel="Selecione um Produto"
+                                      itemValue="null"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{produtoControle.listaEntidades}"
+                                       var="prod"
+                                       itemLabel="#{prod.nome}"
+                                       itemValue="#{prod}"/>
+                        <p:ajax event="valueChange" 
+                                update="vrProd quant" 
+                                listener="#{vendaControle.entidade.item.setValorProdutoSelecionado()}"/>
+                    </p:selectOneMenu>
+                    Quantidade: <p:inputText id ="quant"
+                                             value="#{vendaControle.entidade.item.quantidade}">
+                        <f:convertNumber minFractionDigits="2"/>
+                    </p:inputText>
+                    Preço: <p:inputText  id="vrProd" 
+                                         value="#{vendaControle.entidade.item.vrUnitario}"/>
+                    <p:commandButton value="Adicionar"
+                                     action="#{vendaControle.addItem()}"
+                                     ajax="false" />
+                </h:panelGrid>
+
+                <p:dataTable value="#{vendaControle.entidade.itensVenda}"
+                             var="item"
+                             paginator="true"
+                             rows="10">
+                    <p:column headerText="Produto">
+                        <h:outputText value="#{item.produto.nome}"/>
+                    </p:column>
+
+                    <p:column headerText="Preço" >
+                        <h:outputText value="#{item.vrUnitario}"/>
+                    </p:column>
+
+                    <p:column headerText="Quantidade">
+                        <p:inputText value="#{item.quantidade}" size="5">
+                            <f:convertNumber maxFractionDigits="2"/>
+                            <f:ajax event="keyup"
+                                    listener="#{vendaControle.entidade.recalcular()}"
+                                    render="vrItem :form:vrBruto :form:vrLiquido"
+                                    />
+                            <f:ajax event="keyup"
+                                    listener="#{vendaControle.entidade.calculaTotalVenda()}"
+                                    render="vrItem :form:vrBruto :form:vrLiquido"/>
+                        </p:inputText>
+                    </p:column>
+                    <p:column headerText="Total Item">
+                        <h:outputText id="vrItem"
+                                      value="#{item.calculaItens}"/>
+                    </p:column>
+
+                    <p:column headerText="Remover">
+                        <p:commandButton value="Remover"
+                                         actionListener="#{vendaControle.entidade.setItem(item)}"
+                                         action="#{vendaControle.entidade.removerItem()}"
+                                         ajax="false"/>
+                    </p:column>
+                </p:dataTable>
+                <p:panel header="Dados de Faturamento">
+                    <h:panelGrid  columns="2">
+                        Total bruto:<h:outputText id="vrBruto"
+                                                  value="#{vendaControle.entidade.valorBruto}">
+                            <f:convertNumber minFractionDigits="2"
+                                             maxFractionDigits="2"
+                                             type="currency"
+                                             currencySymbol="R$"/>
+                        </h:outputText>
+
+
+                        Desconto: <h:inputText value="#{vendaControle.entidade.desconto}">
+                            <p:ajax event="keyup" 
+                                    update="vrLiquido totalVenda" 
+                                    listener="#{vendaControle.entidade.calculaTotais()}"/>
+                        </h:inputText>
+
+                        Total Liquido: <h:outputText id="vrLiquido"
+                                                     value="#{vendaControle.entidade.valorLiquido}">
+                            <f:convertNumber minFractionDigits="2"
+                                             maxFractionDigits="2"
+                                             type="currency"
+                                             currencySymbol="R$"/>
+                        </h:outputText>
+                        Valor de Entrada: <h:inputText id="vrEntrada" 
+                                                       value="#{vendaControle.entidade.valorEntrada}"
+                                                       disabled="#{vendaControle.entidade.planoPagamento.tipoPagamento=='AVISTA'}">
+                            <p:ajax event="keyup" 
+                                    listener="#{vendaControle.entidade.calculaTotalVenda()}"
+                                    update="totalVenda"/>
+                        </h:inputText>
+                        Total Venda: <h:outputText id="totalVenda"
+                                                   value="#{vendaControle.entidade.totalVenda}">
+                            <f:convertNumber minFractionDigits="2"
+                                             maxFractionDigits="2"
+                                             type="currency"
+                                             currencySymbol="R$"/>
+                        </h:outputText>
+                        Plano de Pagamento: <p:selectOneMenu value="#{vendaControle.entidade.planoPagamento}"
+                                                             converter="#{planoPagamentoControle.converter}"
+                                                             filter="true">
+                            <f:selectItems value="#{planoPagamentoControle.listaEntidades}"
+                                           var="plan"
+                                           itemLabel="#{plan.descricao}"
+                                           itemValue="#{plan}"
+                                           />
+                            <f:ajax event="change"
+                                    listener="#{vendaControle.validaTipoPagamento()}"
+                                    render="parc gerar parcelas vrEntrada"/>
+
+                        </p:selectOneMenu>
+                        Parcelas: <p:inputText id="parc" 
+                                               value="#{vendaControle.entidade.nrParcelas}"
+                                               disabled="#{vendaControle.entidade.planoPagamento.tipoPagamento=='AVISTA'}"/>
+                        <!--                            <f:ajax event="keyup"
+                                                            listener="{vendaControle.entidade.parcelar()}"
+                                                            render="parcelas"/>-->
+
+                        <p:commandButton value="Gerar Parcelas"
+                                         id="gerar"
+                                         action="#{vendaControle.parcelar()}"
+                                         disabled="#{vendaControle.entidade.planoPagamento.tipoPagamento=='AVISTA'}"
+                                         update="parcelas"
+                                         ajax="false"/>
+                    </h:panelGrid>
+                    <hr/>
+                    <p:commandButton value="Fechar Venda"
+                                     action="#{vendaControle.fecharVenda()}"
+                                     ajax="false"/>
+                    <hr/>
+                </p:panel>
+                <p:dataTable id="parcelas" 
+                             value="#{vendaControle.entidade.contasReceber}"
+                             var="cr">
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{cr.vrParcela}"/>
+                    </p:column>
+                    <p:column headerText="Vencimento">
+                        <h:outputText value="#{cr.dtVencimento}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Salvar"
+                                     action="#{vendaControle.salvar()}"
+                                     ajax="false"/>
+                    <p:commandButton value="Cancelar"
+                                     action="#{vendaControle.voltar()}"
+                                     ajax="false"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

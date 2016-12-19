@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <p:messages/>
+        <h:form>
+            <p:panel header="Contas a Receber">
+                <h:panelGrid columns="2">
+                    Código:<p:inputText value="#{contasReceberControle.entidade.id}"
+                                        readonly="true"/>
+                    Nr.Venda:<p:inputText value="#{contasReceberControle.entidade.venda.id}"
+                                          readonly="true"/>
+                    Cliente:<p:selectOneMenu value="#{contasReceberControle.entidade.pessoa}"
+                                             converter="#{pessoaControle.converter}"
+                                             rendered="true"
+                                             requiredMessage="Selecione o cliente!"
+                                             filter="true">
+                        <f:selectItems value="#{pessoaControle.listaEntidades}"
+                                       var="cli"
+                                       itemLabel="#{cli.nomes}"
+                                       itemValue="#{cli}"/>
+                    </p:selectOneMenu>
+                    Dt. Emissão:<p:calendar value="#{contasReceberControle.entidade.dtEmissao}"
+                                            pattern="dd-MM-yyyy"
+                                            mask="true"/>
+                    Dt. Vencimento:<p:calendar value="#{contasReceberControle.entidade.dtVencimento}"
+                                               pattern="dd-MM-yyyy"
+                                               mask="true"/>
+                    Vr.Parcela:<p:inputText value="#{contasReceberControle.entidade.vrParcela}"
+                                            rendered="true"
+                                            requiredMessage="Preencha o valor da parcela!"/>
+
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Salvar" 
+                                         action="#{contasReceberControle.salvar()}" 
+                                         ajax="false"/>
+                        <p:button value="Cancelar" outcome="list.xhtml"/>      
+                    </f:facet>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

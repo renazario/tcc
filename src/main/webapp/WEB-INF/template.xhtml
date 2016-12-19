@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>MariSamu Confecções</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style>
+            *{
+                font-size: 12px;
+            }
+        </style>    
+        
+    </h:head>
+    <h:body>
+        
+        <p:layout  style="height: 644px">
+            <p:layoutUnit position="west" size="180">
+                <h:form>
+                    <!--<p:panel header="Sistema para Gestão de Loja de Varejo"/>-->
+                    <p:menu>
+                        <p:menuitem value="Inicio" action="/index.xhtml?faces-redirect=true" icon="ui-icon-home" ajax="false"/>
+                        <p:submenu label="Cadastros">
+                            <p:menuitem value="Estado" action="/estado/list?faces-redirect=true" ajax="false" icon="ui-icon-person"/>
+                            <p:separator/>
+                            <p:menuitem value="Cidade" action="/cidade/list?faces-redirect=true" ajax="false" icon="ui-icon-person"/>
+                            <p:separator/>
+                            <p:menuitem value="Produto" action="/produto/list?faces-redirect=true" ajax="false" icon="ui-icon-person"/>
+                            <p:separator/>
+                            <p:menuitem value="Marca" action="/marca/list?faces-redirect=true" ajax="false" icon="ui-icon-person"/>
+                            <p:separator/>
+                            <p:menuitem value="Grupo de Produtos" action="/grupo/list?faces-redirect=true" ajax="false" icon="ui-icon-person"/>
+                            <p:separator/>
+                            <p:menuitem value="Fornecedor" action="/fornecedor/list?faces-redirect=true" ajax="false" icon="ui-icon-person"/>
+                            <p:separator/>
+                            <p:menuitem value="Cliente" action="/cliente/list?faces-redirect=true" ajax="false" icon="ui-icon-person"/>
+                            <p:separator/>
+                            <p:menuitem value="Funcionário" action="/funcionario/list?faces-redirect=true" ajax="false" icon="ui-icon-person"/>
+                            <p:separator/>
+                            <p:menuitem value="Plano de Pagamento" action="/planoPagamento/list?faces-redirect=true" ajax="false" icon="ui-icon-person"/>
+                            <p:separator/>
+                            <p:menuitem value="Usuário" action="/usuario/list?faces-redirect=true" ajax="false" icon="ui-icon-person"/>
+                            <p:separator/>
+                        </p:submenu>
+                        <p:submenu label="Movimentos">
+                            <p:menuitem value="Venda" action="/venda/list?faces-redirect=true" ajax="false"/>
+                            <p:menuitem value="Contas a Receber" action="/contasReceber/list?faces-redirect=true" ajax="false"/>
+                            <p:menuitem value="Contas Recebidas" action="/contasRecebidas/list?faces-redirect=true" ajax="false"/>
+                            <p:menuitem value="Compra" action="/compra/list?faces-redirect=true" ajax="false"/>
+                            <p:menuitem value="Contas a Pagar" action="/contasPagar/list?faces-redirect=true" ajax="false"/>
+                            <p:menuitem value="Movimento de Caixa" action="/caixa/list?faces-redirect=true" ajax="false"/>
+                        </p:submenu>
+                           
+                       
+                    </p:menu>
+                </h:form>
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="center" style="max-height: 658px">
+                <ui:insert name="conteudo"/>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>

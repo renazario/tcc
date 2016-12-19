@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages/>
+            <p:panel header="Listagem de Vendas">
+                <p:dataTable value="#{compraControle.listaEntidades}"
+                             var="compra"
+                             sortBy="#{compra.id}"
+                             paginator="true"
+                             rows="10"
+                             filterEvent="enter"
+                             selectionMode="single"
+                             selection="#{compraControle.entidade}"
+                             rowKey="#{compra.id}"
+                             emptyMessage="Não há registro na lista!">
+                    <f:facet name="header">
+                        <p:commandButton value="Novo" 
+                                         action="#{compraControle.novo()}" 
+                                         icon="ui-icon-plus" 
+                                         ajax="false" />
+                        <p:commandButton value="Alterar" 
+                                         action="#{compraControle.carregaCompra()}"
+                                         icon="ui-icon-pencil" 
+                                         ajax="false"/>
+                        <p:commandButton value="Excluir" 
+                                         action="#{compraControle.excluir()}"
+                                         onclick="return confirm('deseja excluir?')"
+                                         icon="ui-icon-trash" 
+                                         ajax="false"/>
+                    </f:facet>
+                    <p:column headerText="Código">
+                        <h:outputText value="#{compra.id}"/>
+                    </p:column>
+                    <p:column headerText="Data da Venda">
+                        <h:outputText value="#{compra.dtCompra}"/>
+                    </p:column>
+                    <p:column headerText="Cliente">
+                        <h:outputText value="#{compra.pessoa.nomeFantasia}"/>
+                    </p:column>
+                    <p:column headerText="Total">
+                        <h:outputText value="#{compra.vrLiquido}"/>
+                    </p:column>
+                    <!--                    <p:column headerText="Opções">
+                                            <p:commandButton value="Alterar"
+                                                             action="{compraControle.carregaVenda()}"
+                                                             actionListener="{compraControle.setEntidade(compra)}"
+                                                             ajax="false"/>
+                                            <p:commandButton value="Excluir"
+                                                             action="{compraControle.excluir()}"
+                                                             ajax="false"/>
+                                        </p:column>-->
+
+                </p:dataTable>
+                <!--                <f:facet name="footer">
+                                    <p:commandButton value="Novo"
+                                                     action="{compraControle.novo()}"
+                                                     ajax="false"/>
+                                </f:facet>-->
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:confirmDialog header="Confirmação" 
+                             message="Deseja excluir a compra?" 
+                             severity="alert" 
+                             closable="false" 
+                             widgetVar="confirmacao">
+                <p:commandButton value="Sim" 
+                                 action="#{compraControle.excluir()}" 
+                                 icon="ui-icon-check" 
+                                 ajax="false"/>
+                <p:commandButton value="Não" 
+                                 action="#{compraControle.voltar()}"
+                                 ajax="false" 
+                                 icon="ui-icon-closetick" 
+                                 immediate="true"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

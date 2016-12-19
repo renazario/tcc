@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <p:messages/>
+        <h:form>
+            <p:panel header="Lista de Cidades">
+                <p:dataTable value="#{cidadeControle.listaEntidades}"
+                             var="cidade"
+                             sortBy="#{cidade.id}"
+                             paginator="true"
+                             rows="10"
+                             filterEvent="enter"  
+                             selectionMode="single" 
+                             selection="#{cidadeControle.entidade}" 
+                             rowKey="#{cidade.id}"
+                             emptyMessage="Não há registro na lista!">
+                    <f:facet name="header">
+                        <p:commandButton value="Novo" 
+                                         action="#{cidadeControle.novo()}" 
+                                         icon="ui-icon-plus" 
+                                         ajax="false" />
+                        <p:commandButton value="Alterar" 
+                                         action="#{cidadeControle.carregarCadastro()}"
+                                         icon="ui-icon-pencil" 
+                                         ajax="false"/>
+                        <p:commandButton value="Excluir" 
+                                         onclick="PF('confirmacao').show()"
+                                         icon="ui-icon-trash"/>
+                    </f:facet>
+                    <p:column  id="id"
+                               headerText="ID"
+                               filterBy="#{cidade.id}"
+                               sortBy="#{cidade.id}">
+                        <h:outputText value="#{cidade.id}"/>
+                    </p:column>
+                    <p:column headerText="Nome" 
+                              filterBy="#{cidade.nome}" 
+                              filterMatchMode="contains"
+                              sortBy="#{cidade.nome}">
+                        <h:outputText value="#{cidade.nome}"/>
+                    </p:column>
+                    <p:column headerText="CEP">
+                        <h:outputText value="#{cidade.cep}"/>
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{cidade.estado.nome}"/>
+                    </p:column>
+
+                    <!--                    <p:column headerText="Opções">
+                                            <p:commandButton value="Alterar"
+                                                             action="form?faces-redirect=true"
+                                                             actionListener="{cidadeControle.setEntidade(cidade)}"
+                                                             ajax="false"/>
+                    
+                                            <p:commandButton value="Excluir" 
+                                                             action="{cidadeControle.excluir(cidade)}"
+                                                             onclick="return confirm('Deseja Excluir?')"
+                                                             ajax="false"/>
+                                        </p:column>-->
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:confirmDialog header="Confirmação" 
+                             message="Deseja excluir a cidade?" 
+                             severity="alert" 
+                             closable="false" 
+                             widgetVar="confirmacao">
+                <p:commandButton value="Sim" 
+                                 action="#{cidadeControle.excluir()}" 
+                                 icon="ui-icon-check" 
+                                 ajax="false"/>
+                <p:commandButton value="Não" 
+                                 action="#{cidadeControle.voltar()}"
+                                 ajax="false" 
+                                 icon="ui-icon-closethick" 
+                                 immediate="true"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages/>
+            <p:panel header="Cadastro de Funcionário">
+                <h:panelGrid columns="2">
+                    Código: <p:inputText value="#{funcionarioControle.entidade.id}" readonly="true"/>
+                    Data Cadastro: <p:calendar value="#{funcionarioControle.entidade.dtCadastro}"
+                                               pattern="dd/MM/yyyy"
+                                               locale="pt_BR"
+                                               timeZone="America/Sao_Paulo"/>
+                    Nome: <p:inputText value="#{funcionarioControle.entidade.nome}" required="true" requiredMessage="Informe o nome!"/>
+                    CPF: <p:inputText value="#{funcionarioControle.entidade.cpf}" required="true" requiredMessage="Informe o CFP!"/>
+                    RG: <p:inputText value="#{funcionarioControle.entidade.rg}" required="true" requiredMessage="Informe o RG!"/>
+                    Data Nascimento: <p:calendar value="#{funcionarioControle.entidade.dt_nascimento}" 
+                                                 pattern="dd/MM/yyyy"
+                                                 locale="pt_BR"
+                                                 timeZone="America/Sao_Paulo"
+                                                 required="true"
+                                                 requiredMessage="Informe a data de nascimento!"/>
+                    Função: <p:selectOneMenu
+                        value="#{funcionarioControle.entidade.funcao}" 
+                        required="true" 
+                        requiredMessage="Informa a função!">
+                    
+                        <f:selectItems value="#{funcionarioControle.funcaos}"
+                                       var="funcao"
+                                       itemLabel="#{funcao.descricao}"
+                                       itemValue="#{funcao}"/>
+                    </p:selectOneMenu>
+                    Salario: <p:inputText value="#{funcionarioControle.entidade.salario}"/>
+                    Sexo: <p:selectOneRadio value="#{funcionarioControle.entidade.sexo}">
+                        <f:selectItem itemLabel="Masculino"
+                                      itemValue="Masculino"/>
+                        <f:selectItem itemLabel="Feminino"
+                                      itemValue="Feminino"/>
+                    </p:selectOneRadio>
+                    Admissão: <p:calendar value="#{funcionarioControle.entidade.dtAdmissao}"
+                                          pattern="dd/MM/yyyy"
+                                          locale="pt_BR"
+                                          timeZone="Americo/Sao_Paulo"
+                                          required="true"
+                                          requiredMessage="Informe a data de Admissão!"/>
+                    Demissão: <p:calendar value="#{funcionarioControle.entidade.dtDemissao}"
+                                          pattern="dd/MM/yyyy"
+                                          locale="pt_BR"
+                                          timeZone="Americo/Sao_Paulo"/>
+                    
+                    Celular: <p:inputText value="#{funcionarioControle.entidade.telefoneCel}"/>
+                    Residencial: <p:inputText value="#{funcionarioControle.entidade.telefoneRes}"/>
+                    Endereço: <p:inputText value="#{funcionarioControle.entidade.endereco}"/>
+                              
+                    <f:facet name="footer">
+                        <p:commandButton value="Salvar"
+                                         action="#{funcionarioControle.salvar()}"
+                                         ajax="false"/>
+                        <p:button value="Cancelar"
+                                  outcome="list.xhtml"/>
+                    </f:facet>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages/>
+            <p:panel header="Cadastro de Cliente">
+                <p:selectOneRadio value="#{pessoaControle.tipoPessoa}"
+                                  disabled="#{pessoaControle.entidade.id!=null}">
+                    <f:selectItem itemLabel="Pessoa Fisica"
+                                  itemValue="PF"/>
+                    <f:selectItem itemLabel="Pessoa Juridica"
+                                  itemValue="PJ"/>
+                    <f:ajax event="change" render="painel"/>
+                </p:selectOneRadio>
+                <h:panelGrid columns="2" id="painel">
+                    Código: <p:inputText value="#{pessoaControle.entidade.id}" disabled="true"/>
+                    Data Cadastro: <p:calendar value="#{pessoaControle.entidade.dtCadastro}" 
+                                               pattern="dd/MM/yyyy"
+                                               locale="pt_BR"
+                                               timeZone="America/Sao_Paulo"/>
+                    <h:outputText value="Nome"
+                                  rendered="#{pessoaControle.tipoPessoa=='PF'}"/>
+                    <p:inputText value="#{pessoaControle.entidade.nome}"
+                                 rendered="#{pessoaControle.tipoPessoa=='PF'}"
+                                 required="true"
+                                 requiredMessage="Informe o Nome!"/>
+
+                    <h:outputText value="CPF:" 
+                                  rendered="#{pessoaControle.tipoPessoa=='PF'}"/>
+                    <p:inputMask value="#{pessoaControle.entidade.cpf}"
+                                 rendered="#{pessoaControle.tipoPessoa=='PF'}"
+                                 required="true"
+                                 requiredMessage="Informe o CPF!"
+                                 mask="999.999.999-99"/>
+
+                    <h:outputText value="RG:"
+                                  rendered="#{pessoaControle.tipoPessoa=='PF'}"/>
+                    <p:inputText value="#{pessoaControle.entidade.rg}"
+                                 rendered="#{pessoaControle.tipoPessoa=='PF'}"
+                                 required="true"
+                                 requiredMessage="Informe o RG!"/>
+
+                    <h:outputText value="Data de Nascimento:"
+                                  rendered="#{pessoaControle.tipoPessoa=='PF'}"/>
+                    <p:calendar value="#{pessoaControle.entidade.dt_nascimento}"
+                                rendered="#{pessoaControle.tipoPessoa=='PF'}"
+                                required="true"
+                                requiredMessage="Informe a data de nascimento!"/>
+
+                    <h:outputText value="Sexo:"
+                                  rendered="#{pessoaControle.tipoPessoa=='PF'}"/>
+                    <p:selectOneRadio value="#{pessoaControle.entidade.sexo}"
+                                      rendered="#{pessoaControle.tipoPessoa=='PF'}">
+                        <f:selectItem itemLabel="Masculino"
+                                      itemValue="Masculino"/>
+                        <f:selectItem itemLabel="Feminino"
+                                      itemValue="Feminino"/>
+                    </p:selectOneRadio>
+                    <h:outputText value="Nome Fantasia"
+                                  rendered="#{pessoaControle.tipoPessoa=='PJ'}"/>
+                    <p:inputText value="#{pessoaControle.entidade.nome}"
+                                 rendered="#{pessoaControle.tipoPessoa=='PJ'}"
+                                 required="true"
+                                 requiredMessage="Informe o Nome Fantasia!"/>
+                    <h:outputText value="CNPJ:"
+                                  rendered="#{pessoaControle.tipoPessoa=='PJ'}"/>
+                    <p:inputMask value="#{pessoaControle.entidade.cnpj}"
+                                 rendered="#{pessoaControle.tipoPessoa=='PJ'}"
+                                 required="true"
+                                 requiredMessage="Informe o CNPJ!"
+                                 mask="99.999.999/9999-99"/>
+
+                    <h:outputText value="IE:"
+                                  rendered="#{pessoaControle.tipoPessoa=='PJ'}"/>
+                    <p:inputText value="#{pessoaControle.entidade.ie}"
+                                 rendered="#{pessoaControle.tipoPessoa=='PJ'}"
+                                 required="true"
+                                 requiredMessage="Informe a Inscrição Estadual!"/>
+
+                    <h:outputText value="Razão Social:"
+                                  rendered="#{pessoaControle.tipoPessoa=='PJ'}"/>
+                    <p:inputText value="#{pessoaControle.entidade.razaoSocial}"
+                                 rendered="#{pessoaControle.tipoPessoa=='PJ'}"
+                                 required="true"
+                                 requiredMessage="Informe a Razão Social!"/>
+                    Cidade:<p:selectOneMenu value="#{pessoaControle.entidade.cidade}"
+                                            converter="#{cidadeControle.converter}"
+                                            filter="true"
+                                            required="true"
+                                            requiredMessage="Informe a Cidade!">
+                        <f:selectItems value="#{cidadeControle.listaEntidades}"
+                                       var="cid"
+                                       itemLabel="#{cid.nome}"
+                                       itemValue="#{cid}"/>
+                    </p:selectOneMenu>
+                    Estado:<p:selectOneMenu value="#{pessoaControle.estado}"
+                                            converter="#{estadoControle.converter}"
+                                            filter="true"
+                                            required="true"
+                                            requiredMessage="Informe o Estado!">
+                        <f:selectItems value="#{estadoControle.listaEntidades}"
+                                       var="est"
+                                       itemLabel="#{est.sigla}"
+                                       itemValue="#{est}"/>
+                    </p:selectOneMenu>
+
+                    Endereço: <p:inputText value="#{pessoaControle.entidade.endereco}"/>
+                    Endereço Comercial<p:inputText value="#{pessoaControle.entidade.enderecoComercial}"/>
+                    Telefone Residencial:<p:inputMask value="#{pessoaControle.entidade.telefoneRes}"
+                                                      mask="(99)9999-9999"/>
+                    Celular:<p:inputMask value="#{pessoaControle.entidade.telefoneCel}"
+                                         mask="(99)9999-9999"/>
+                    Contato:<p:inputText value="#{pessoaControle.entidade.contato}"/>
+                    Data Primeira Compra: <p:calendar value="#{pessoaControle.entidade.dtPrimeiraCompra}"
+                                                      pattern="dd/MM/yyyy"
+                                                      locale="pt_BR"
+                                                      timeZone="America/Sao_Paulo"/>
+                    Data Ultima Compra: <p:calendar value="#{pessoaControle.entidade.dtUltimaCompra}"
+                                                    pattern="dd/MM/yyyy"
+                                                    locale="pt_BR"
+                                                    timeZone="America/Sao_Paulo"/>
+                    Limite Crédito: <p:inputText value="#{pessoaControle.entidade.limiteCredito}"
+                                                 required="true"
+                                                 requiredMessage="Informe o Limite de Crédito!"/>
+                    Pendência: <p:selectBooleanCheckbox value="#{pessoaControle.entidade.pendencia}"/>
+                    Ativo: <p:selectBooleanCheckbox value="#{pessoaControle.entidade.ativo}"/>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Salvar"
+                                         action="#{pessoaControle.salvar()}"
+                                         ajax="false"/>
+                        <p:button value="Cancelar"
+                                  outcome="list.xhtml"/>
+                    </f:facet>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

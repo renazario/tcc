@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages/>
+            <p:panel header="Lista de Estados">
+                <p:dataTable value="#{estadoControle.listaEntidades}"
+                             var="estado"
+                             sortBy="#{estado.id}"
+                             paginator="true"
+                             rows="10"
+                             filterEvent="enter"
+                             selectionMode="single"
+                             selection="#{estadoControle.entidade}"
+                             rowKey="#{estado.id}"
+                             emptyMessage="Não há registro na lista!">
+                    <f:facet name="header">
+                        <p:commandButton value="Novo"
+                                         action="#{estadoControle.novo()}"
+                                         icon="ui-icon-plus"
+                                         ajax="false"/>
+                        <p:commandButton value="Alterar"
+                                         action="#{estadoControle.carregarCadastro()}"
+                                         icon="ui-icon-pencil"
+                                         ajax="false"/>
+                        <p:commandButton value="Excluir"
+                                         action="#{estadoControle.excluir()}"
+                                         onclick="return confirm('Deseja excluir?')"
+                                         icon="ui-icon-trash"
+                                         ajax="false"/>
+                    </f:facet>
+                    <p:column  id="id"
+                               headerText="ID"
+                               filterBy="#{estado.id}"
+                               sortBy="#{estado.id}">
+                        <h:outputText value="#{estado.id}"/>
+                    </p:column>
+                    <p:column headerText="Nome"
+                              filterBy="#{estado.nome}" 
+                              filterMatchMode="contains" 
+                              sortBy="#{estado.nome}">
+                        <h:outputText value="#{estado.nome}"/>
+                    </p:column>
+                    <p:column headerText="Sigla">
+                        <h:outputText value="#{estado.sigla}"/>
+                    </p:column>
+                    <!--                    <p:column headerText="Opções">
+                                            <p:commandButton value="Alterar"
+                                                             action="form?faces-redirect=true"
+                                                             actionListener="{estadoControle.setEntidade(estado)}"
+                                                             ajax="false"/>
+                                            <p:commandButton value="Excluir"
+                                                             action="{estadoControle.excluir(estado)}"
+                                                             onclick="return confirm('Deseja Excluir?')"
+                                                             ajax="false"/>
+                                        </p:column>-->
+                </p:dataTable>
+                <f:facet name="footer">
+                    <!--                    <p:commandButton value="Novo"
+                                                         action="{estadoControle.novo()}"
+                                                         ajax="false"/>-->
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:confirmDialog header="Confirmação"
+                             message="Deseja excluir o item?"
+                             severity="alert"
+                             closable="false"
+                             widgetVar="confirmacao">
+                <p:commandButton value="Sim"
+                                 action="#{estadoControle.excluir()}"
+                                 icon="ui-icon-check"
+                                 ajax="false"/>
+                <p:commandButton value="Não"
+                                 action="#{estadoControle.voltar()}"
+                                 icon="ui-icon-closetick"
+                                 ajax="false"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

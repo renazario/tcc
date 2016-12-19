@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <h:form>
+            <p:panel header="Movimento de Caixa">
+                <p:dataTable value="#{caixaControle.listaEntidades}"
+                             var="caixa"
+                             sortBy="#{caixa.id}"
+                             paginator="true"
+                             rows="15"
+                             filterEvent="enter"
+                             selectionMode="single"
+                             selection="#{caixaControle.entidade}"
+                             rowKey="#{caixa.id}"
+                             emptyMessage="Não há registro na lista!">
+                    <f:facet name="header">
+                        <p:commandButton value="Incluir Lançamento"
+                                         action="#{caixaControle.incluir()}"
+                                         onclick="PF('incluirCaixa').show()"
+                                         icon="ui-icon-plus"
+                                         update=":formIncluir"/>
+                    </f:facet>
+                    <p:column headerText="Código"
+                              filterBy="#{caixa.id}"
+                              sortBy="#{caixa.id}">
+                        <h:outputText value="#{caixa.id}"/>
+                    </p:column>
+                    <p:column headerText="Data Lançamento"
+                              filterBy="#{caixa.dtLancamento}"
+                              sortBy="#{caixa.dtLancamento}">
+                        <h:outputText value="#{caixa.dtLancamento}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Crédito">
+                        <h:outputText value="#{caixa.vrCredito}"/>
+                    </p:column>
+                    <p:column headerText="Débito">
+                        <h:outputText value="#{caixa.vrDebito}"/>
+                    </p:column>
+                    <p:column headerText="Observação">
+                        <h:outputText value="#{caixa.descricao}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <p:dialog widgetVar="incluirCaixa">
+            <h:form id="formIncluir">
+                <p:panel header="Lançamento de caixa">
+                    <h:panelGrid columns="2">
+                        Data Lançamento:<h:panelGroup>
+                            <p:calendar value="#{caixaControle.entidade.dtLancamento}"
+                                        pattern="dd-MM-yyyy"
+                                        timeZone="America/Sao_Paulo"
+                                        mask="true"/>
+                        </h:panelGroup>
+                        Crédito:<p:selectOneRadio value="#{caixaControle.entidade.credito}"/>
+                        Débito:<p:selectOneRadio value="#{caixaControle.entidade.debito}"/>
+                        Valor Crédito:<h:inputText value="#{caixaControle.entidade.vrCredito}"/>
+
+                        Valor Débito:<h:inputText id="vrDebito"
+                                                  value="#{caixaControle.entidade.vrDebito}"
+                                                  disabled="#{caixaControle.entidade.credito==true}"/>
+
+                        Observação:<p:inputTextarea rows="5" cols="50" value="#{caixaControle.entidade.descricao}"
+                                                    rendered="true"
+                                                    requiredMessage="Preencha a Observação!"/>
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton value="Fechar Lançamento"
+                                         action="#{caixaControle.salvar()}"
+                                         ajax="false"/>
+                        <p:commandButton value="Cancelar"
+                                         action="#{caixaControle.voltar()}"
+                                         ajax="false"/>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

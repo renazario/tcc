@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages/>
+            <p:panel header="Lista de Produtos">
+                <p:dataTable value="#{produtoControle.listaEntidades}"
+                             var="produto"
+                             sortBy="#{produto.id}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="5,10,15,20"
+                             filterEvent="enter"
+                             selectionMode="single"
+                             selection="#{produtoControle.entidade}"
+                             rowKey="#{produto.id}"
+                             emptyMessage="Não há registro na lista!">
+                    <f:facet name="header">
+                        <p:commandButton value="Novo" 
+                                         action="#{produtoControle.novo()}" 
+                                         icon="ui-icon-plus" 
+                                         ajax="false" />
+                        <p:commandButton value="Alterar" 
+                                         action="#{produtoControle.carregarCadastro()}"
+                                         icon="ui-icon-pencil" 
+                                         ajax="false"/>
+                        <p:commandButton value="Excluir" 
+                                         action="#{produtoControle.excluir()}"
+                                         onclick="return confirm('deseja excluir?')"
+                                         icon="ui-icon-trash" 
+                                         ajax="false"/>
+                    </f:facet>
+                    <p:column headerText="ID" 
+                              width="30"
+                              sortBy="#{produto.id}">
+                        <h:outputText value="#{produto.id}"/>
+                    </p:column>
+                    <p:column filterBy="#{produto.nome}" 
+                              filterMatchMode="contains" 
+                              headerText="Nome"
+                              width="350"
+                              sortBy="#{produto.nome}">
+                        <h:outputText value="#{produto.nome}"/>
+                    </p:column>
+                    <p:column headerText="Preço de Custo" width="60">
+                        <h:outputText value="#{produto.precoCusto}"/>
+                    </p:column>
+                    <p:column headerText="Preço de Venda" width="60">
+                        <h:outputText value="#{produto.precoVenda}"/>
+                    </p:column>
+                    <p:column headerText="Estoque" width="60">
+                        <h:outputText value="#{produto.estoque}"/>
+                    </p:column>
+                    <p:column headerText="Estoque Mínimo" width="60">
+                        <h:outputText value="#{produto.estoqueMin}"/>
+                    </p:column>
+                    <p:column headerText="Marca">
+                        <h:outputText value="#{produto.marca.nome}"/>
+                    </p:column>
+
+                    <!--                    <p:column headerText="Opções">
+                                            <p:commandButton value="Alterar"
+                                                             action="form?faces-redirect=true"
+                                                             actionListener="{produtoControle.setEntidade(produto)}"
+                                                             ajax="false"/>
+                    
+                                            <p:commandButton value="Excluir"
+                                                             action="{produtoControle.excluir(produto)}"
+                                                             onclick="return confirm('Deseja Excluir?')"
+                                                             ajax="false"/>
+                                        </p:column>-->
+                </p:dataTable>
+                <!--                <f:facet name="footer">
+                                    <p:commandButton value="Novo"
+                                                     action="{produtoControle.novo()}"
+                                                     ajax="false"/>
+                                </f:facet>-->
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:confirmDialog header="Confirmação" 
+                             message="Deseja excluir o produto?" 
+                             severity="alert" 
+                             closable="false" 
+                             widgetVar="confirmacao">
+                <p:commandButton value="Sim" 
+                                 action="#{produtoControle.excluir()}" 
+                                 icon="ui-icon-check" 
+                                 ajax="false"/>
+                <p:commandButton value="Não" 
+                                 action="#{produtoControle.voltar()}"
+                                 ajax="false" 
+                                 icon="ui-icon-closetick" 
+                                 immediate="true"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

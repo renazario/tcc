@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <p:messages/>
+        <h:form>
+            <p:panel header="Cadastro de Usuario">
+                <h:panelGrid columns="2">
+                    Código:<p:inputText value="#{usuarioControle.entidade.id}" readonly="true"/>
+                    
+                    Funcionario: <p:selectOneMenu 
+                        value="#{usuarioControle.entidade.funcionario}" 
+                        converter="#{funcionarioControle.converter}" 
+                        required="true" 
+                        filter="true"
+                        requiredMessage=" Informe o Funcionario">
+                        <f:selectItems value="#{funcionarioControle.listaEntidades}"
+                                       var="fun"
+                                       itemLabel="#{fun.nome}"
+                                       itemValue="#{fun}"/>
+                    </p:selectOneMenu>
+                    Login: <p:inputText value="#{usuarioControle.entidade.login}" 
+                                        required="true"
+                                        requiredMessage="Informe o Login!"/>
+                    Senha: <p:password value="#{usuarioControle.entidade.senha}" />
+                    
+                    <f:facet name="footer">
+                        <p:commandButton value="Salvar" action="#{usuarioControle.salvar()}" ajax="false"/>
+                        <p:button value="Cancelar" outcome="list.xhtml"/>      
+                    </f:facet>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>  
+    </ui:define>
+</ui:composition>

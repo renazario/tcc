@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <p:messages/>
+        <h:form>
+            <p:panel header="Lista de Contas a Pagar">
+                <p:dataTable value="#{contasPagarControle.contasPagar}"
+                             var="cp"
+                             sortBy="#{cp.id}"
+                             paginator="true"
+                             rows="10"
+                             filterEvent="enter"
+                             selectionMode="single"
+                             selection="#{contasPagarControle.entidade}"
+                             rowKey="#{cp.id}"
+                             emptyMessage="Não há registro na lista!">
+                    <f:facet name="header">
+                        <p:commandButton value="Novo" 
+                                         action="#{contasPagarControle.novo()}" 
+                                         icon="ui-icon-plus" 
+                                         ajax="false" />
+                        <p:commandButton value="Alterar" 
+                                         action="#{contasPagarControle.carregarCadastro()}"
+                                         icon="ui-icon-pencil" 
+                                         ajax="false"/>
+<!--                        <p:commandButton value="Baixar Titulo"
+                                         onclick="PF('receberConta').show()"
+                                         icon="ui-icon-suitcase" 
+                                         update=":formPagar"/>-->
+                        <p:commandButton value="Excluir" 
+                                         action="#{contasPagarControle.excluir()}"
+                                         onclick="return confirm('deseja excluir?')"
+                                         icon="ui-icon-trash" 
+                                         ajax="false"/>
+                    </f:facet>
+                    <p:column headerText="ID"
+                              filterBy="#{cp.id}"
+                              sortBy="#{cp.id}">
+                        <h:outputText value="#{cp.id}"/>
+                    </p:column>
+                    <p:column headerText="Nr.Venda"
+                              filterBy="#{cp.compra.id}"
+                              sortBy="#{cp.compra.id}">
+                        <h:outputText value="#{cp.compra.id}"/>
+                    </p:column>
+                    <p:column headerText="Fornecedor"
+                              filterBy="#{cp.pessoa.razaoSocial}"
+                              sortBy="#{cp.pessoa.razaoSocial}">
+                        <h:outputText value="#{cp.pessoa.razaoSocial}"/>
+                    </p:column>
+                    <p:column headerText="Valor Parcela"
+                              filterBy="#{cp.vrParcela}"
+                              sortBy="#{cp.vrParcela}">
+                        <h:outputText value="#{cp.vrParcela}"/>
+                    </p:column>
+                    <p:column headerText="Data Emissão"
+                              filterBy="#{cp.dtEmissao}"
+                              sortBy="#{cp.dtEmissao}">
+                        <h:outputText value="#{cp.dtEmissao}"/>
+                    </p:column>
+                    <p:column headerText="Data Vencimento"
+                              filterBy="#{cp.dtVencimento}"
+                              sortBy="#{cp.dtVencimento}">
+                        <h:outputText value="#{cp.dtVencimento}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+<!--        <p:dialog widgetVar="receberConta">
+            <h:form id="formPagar">
+                <p:inputText value="{contasPagarControle.vrPago}">
+                    <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                </p:inputText>
+                <p:calendar value="{contasPagarControle.novaDataVencimento}" pattern="dd/MM/yyyy"/>
+                <p:commandButton value="Pagar" action="{contasPagarControle.pagarConta()}" ajax="false"/>
+            </h:form>
+        </p:dialog>-->
+    </ui:define>
+</ui:composition>

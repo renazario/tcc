@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages/>
+            <p:panel header="Listagem de Vendas">
+                <p:dataTable value="#{vendaControle.listaEntidades}"
+                             var="venda"
+                             sortBy="#{venda.id}"
+                             paginator="true"
+                             rows="10"
+                             filterEvent="enter"
+                             selectionMode="single"
+                             selection="#{vendaControle.entidade}"
+                             rowKey="#{venda.id}"
+                             emptyMessage="Não há registro na lista!">
+                    <f:facet name="header">
+                        <p:commandButton value="Novo" 
+                                         action="#{vendaControle.novo()}" 
+                                         icon="ui-icon-plus" 
+                                         ajax="false" />
+                        <p:commandButton value="Alterar" 
+                                         action="#{vendaControle.carregaVenda()}"
+                                         icon="ui-icon-pencil" 
+                                         ajax="false"/>
+                        <p:commandButton value="Excluir" 
+                                         action="#{vendaControle.excluir()}"
+                                         onclick="return confirm('deseja excluir?')"
+                                         icon="ui-icon-trash" 
+                                         ajax="false"/>
+                        <p:commandButton id="abrir"
+                                         value="Abrir" 
+                                         action="#{vendaControle.abrirVenda()}"
+                                         icon="ui-icon-arrowrefresh-1-w" 
+                                         ajax="false"/>
+                    </f:facet>
+                    <p:column headerText="Código">
+                        <h:outputText value="#{venda.id}"/>
+                    </p:column>
+                    <p:column headerText="Data da Venda">
+                        <h:outputText value="#{venda.dtVenda}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Cliente">
+                        <h:outputText value="#{venda.pessoa.nomes}"/>
+                    </p:column>
+                    <p:column headerText="Total">
+                        <h:outputText value="#{venda.valorLiquido}"/>
+                    </p:column>
+                    <p:column headerText="Status">
+                        <h:outputText value="#{venda.statusFechado?'Fechado':'Aberto'}"/>
+                    </p:column>
+                    <!--                    <p:column headerText="Opções">
+                                            <p:commandButton value="Alterar"
+                                                             action="{vendaControle.carregaVenda()}"
+                                                             actionListener="{vendaControle.setEntidade(venda)}"
+                                                             ajax="false"/>
+                                            <p:commandButton value="Excluir"
+                                                             action="{vendaControle.excluir()}"
+                                                             ajax="false"/>
+                                        </p:column>-->
+
+                </p:dataTable>
+                <!--                <f:facet name="footer">
+                                    <p:commandButton value="Novo"
+                                                     action="{vendaControle.novo()}"
+                                                     ajax="false"/>
+                                </f:facet>-->
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:confirmDialog header="Confirmação" 
+                             message="Deseja excluir a Venda?" 
+                             severity="alert" 
+                             closable="false" 
+                             widgetVar="confirmacao">
+                <p:commandButton value="Sim" 
+                                 action="#{vendaControle.excluir()}" 
+                                 icon="ui-icon-check" 
+                                 ajax="false"/>
+                <p:commandButton value="Não" 
+                                 action="#{vendaControle.voltar()}"
+                                 ajax="false" 
+                                 icon="ui-icon-closetick" 
+                                 immediate="true"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

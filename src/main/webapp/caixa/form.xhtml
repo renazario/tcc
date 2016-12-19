@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <p:messages/>
+        <h:form>
+            <p:panel header="Lançamento de caixa">
+                <h:panelGrid columns="2">
+                    Data Lançamento:<h:panelGroup>
+                        <p:calendar value="#{caixaControle.entidade.dtLancamento}"
+                                    pattern="dd-MM-yyyy"
+                                    timeZone="America/Sao_Paulo"
+                                    mask="true"/>
+                    </h:panelGroup>
+                    Crédito:<p:selectOneRadio value="#{caixaControle.entidade.credito}"/>
+                    Débito:<p:selectOneRadio value="#{caixaControle.entidade.debito}"/>
+                    Valor Crédito:<h:inputText value="#{caixaControle.entidade.vrCredito}"/>
+                    
+                    Valor Débito:<h:inputText value="#{caixaControle.entidade.vrDebito}"/>
+                  
+                    Observação:<p:inputTextarea rows="5" cols="50" value="#{caixaControle.entidade.descricao}"
+                                                rendered="true"
+                                                requiredMessage="Preencha a Observação!"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:commandButton value="Fechar Lançamento"
+                                     action="#{caixaControle.salvar()}"
+                                     ajax="false"/>
+                    <p:commandButton value="Cancelar"
+                                     action="#{caixaControle.voltar()}"
+                                     ajax="false"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

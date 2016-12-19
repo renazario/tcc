@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+
+        <h:form>
+            <p:messages/>
+            <p:panel header="Lista de Usuarios">
+                <p:dataTable value="#{usuarioControle.listaEntidades}"
+                             var="usuario"
+                             sortBy="#{usuario.id}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="2,5,10,15"
+                             filterEvent="enter"
+                             selectionMode="single"
+                             selection="#{usuarioControle.entidade}"
+                             rowKey="#{usuario.id}"
+                             emptyMessage="Não há registro na lista!">
+                    <f:facet name="header">
+                        <p:commandButton value="Novo" 
+                                         action="#{usuarioControle.novo()}" 
+                                         icon="ui-icon-plus" 
+                                         ajax="false" />
+                        <p:commandButton value="Alterar" 
+                                         action="#{usuarioControle.carregarCadastro()}"
+                                         icon="ui-icon-pencil" 
+                                         ajax="false"/>
+                        <p:commandButton value="Excluir" 
+                                         action="#{usuarioControle.excluir()}"
+                                         onclick="return confirm('deseja excluir?')"
+                                         icon="ui-icon-trash" 
+                                         ajax="false"/>
+                    </f:facet>
+                    <p:column  headerText="ID"
+                               sortBy="#{usuario.id}">
+                        <h:outputText value="#{usuario.id}"/>
+                    </p:column>
+                    <p:column headerText="Funcionário"
+                              filterBy="#{usuario.funcionario.nome}" 
+                              filterMatchMode="contains"
+                              sortBy="#{usuario.funcionario.nome}">
+                        <h:outputText value="#{usuario.funcionario.nome}"/>
+                    </p:column>
+                    <p:column headerText="Login">
+                        <h:outputText value="#{usuario.login}"/>
+                    </p:column>
+                    
+<!--                    <p:column headerText="Opções">
+                        <p:commandButton value="Alterar"
+                                         action="form?faces-redirect=true"
+                                         actionListener="{usuarioControle.setEntidade(usuario)}"
+                                         ajax="false"/>
+                        
+                        <p:commandButton value="Excluir"
+                                         action="{usuarioControle.excluir(usuario)}"
+                                         onclick="return confirm('Deseja Excluir?')"
+                                         ajax="false"/>
+                    </p:column>-->
+                </p:dataTable>
+<!--                <f:facet name="footer">
+                    <p:commandButton value="Novo"
+                                     action="{usuarioControle.novo()}"
+                                     ajax="false"/>
+                </f:facet>-->
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:confirmDialog header="Confirmação" 
+                             message="Deseja excluir o usuario?" 
+                             severity="alert" 
+                             closable="false" 
+                             widgetVar="confirmacao">
+                <p:commandButton value="Sim" 
+                                 action="#{marcaControle.excluir()}" 
+                                 icon="ui-icon-check" 
+                                 ajax="false"/>
+                <p:commandButton value="Não" 
+                                 action="#{marcaControle.voltar()}"
+                                 ajax="false" 
+                                 icon="ui-icon-closetick" 
+                                 immediate="true"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

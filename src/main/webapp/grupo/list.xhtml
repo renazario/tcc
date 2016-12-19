@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages/>
+            <p:panel header="Lista de Grupos">
+                <p:dataTable value="#{grupoControle.listaEntidades}"
+                             var="grupo"
+                             sortBy="#{grupo.id}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="2,5,10,15"
+                             filterEvent="enter"
+                             selectionMode="single"
+                             selection="#{grupoControle.entidade}"
+                             rowKey="#{grupo.id}"
+                             emptyMessage="Não há registro na lista!">
+                    <f:facet name="header">
+                        <p:commandButton value="Novo" 
+                                         action="#{grupoControle.novo()}" 
+                                         icon="ui-icon-plus" 
+                                         ajax="false" />
+                        <p:commandButton value="Alterar" 
+                                         action="#{grupoControle.carregarCadastro()}"
+                                         icon="ui-icon-pencil" 
+                                         ajax="false"/>
+                        <p:commandButton value="Excluir" 
+                                         action="#{grupoControle.excluir()}"
+                                         onclick="return confirm('deseja excluir?')"
+                                         icon="ui-icon-trash" 
+                                         ajax="false"/>
+                    </f:facet>
+                    <p:column  headerText="ID"
+                               sortBy="#{grupo.id}">
+                        <h:outputText value="#{grupo.id}"/>
+                    </p:column>
+                    <p:column headerText="Nome"
+                              filterBy="#{grupo.nome}" 
+                              filterMatchMode="contains" 
+                              sortBy="#{grupo.nome}">
+                        <h:outputText value="#{grupo.nome}"/>
+                    </p:column>
+                    <!--                    <p:column headerText="Opções">
+                                            <p:commandButton value="Alterar"
+                                                             action="form?faces-redirect=true"
+                                                             actionListener="{grupoControle.setEntidade(grupo)}"
+                                                             ajax="false"/>
+                                            <p:commandButton value="Excluir"
+                                                             action="{grupoControle.excluir(grupo)}"
+                                                             onclick="return confirm('Deseja Excluir?')"
+                                                             ajax="false"/>
+                                        </p:column>-->
+                </p:dataTable>
+                <!--                <f:facet name="footer">
+                                    <p:commandButton value="Novo"
+                                                     action="{grupoControle.novo()}"
+                                                     ajax="false"/>
+                                </f:facet>-->
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:confirmDialog header="Confirmação" 
+                             message="Deseja excluir o grupo?" 
+                             severity="alert" 
+                             closable="false" 
+                             widgetVar="confirmacao">
+                <p:commandButton value="Sim" 
+                                 action="#{grupoControle.excluir()}" 
+                                 icon="ui-icon-check" 
+                                 ajax="false"/>
+                <p:commandButton value="Não" 
+                                 action="#{grupoControle.voltar()}"
+                                 ajax="false" 
+                                 icon="ui-icon-closetick" 
+                                 immediate="true"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
